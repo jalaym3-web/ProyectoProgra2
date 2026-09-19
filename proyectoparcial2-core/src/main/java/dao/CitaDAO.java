@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import modelo.Cita;
 import modelo.Cita.EstadoCita;
+import validacion.CitaValidacion;
 
 public class CitaDAO {
 
@@ -23,6 +24,7 @@ public class CitaDAO {
     
     // CREATE
     public int crear(Cita cita) throws SQLException {
+    	CitaValidacion.validar(cita);
         String sql = "INSERT INTO citas (nombre, fecha_hora, descripcion, duracion_min, estado) "
                    + "VALUES (?, ?, ?, ?, ?)";
  

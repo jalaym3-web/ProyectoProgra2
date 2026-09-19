@@ -1,6 +1,6 @@
 package modelo;
 
-import java.sql.Timestamp;
+
 import java.time.LocalDateTime;
 
 public class Cita {

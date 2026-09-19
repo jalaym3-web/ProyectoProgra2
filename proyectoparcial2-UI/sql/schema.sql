@@ -11,3 +11,8 @@ CREATE TABLE IF NOT EXISTS citas (
     duracion_min    INT           NOT NULL DEFAULT 0,
 	estado ENUM('pendiente', 'confirmada', 'cancelada') NOT NULL DEFAULT 'pendiente'  
 );
+
+INSERT IGNORE INTO citas (id, nombre, fecha_hora, descripcion, duracion_min, estado) VALUES
+(1, "Miguel Benitez", '2026-10-01 14:00:00', "visita anual", 60, "pendiente"),
+(2, "Marcela Mendez", '2026-10-05 11:00:00', "consulta trimestral", 60, "pendiente"),
+(3, "Carlos Perez", '2026-10-07 10:30:00', "sesion de fisioterapia", 90, "confirmada");
