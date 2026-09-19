@@ -16,23 +16,25 @@ public class Cita {
 		private String descripcion;
 		private int duracionMin;
 		private EstadoCita estado;
+		private boolean confLlamada;
 		
 		public Cita(int id, String nombre, LocalDateTime fechaHora, String descripcion, int duracionMin,
-				EstadoCita estado) {
+				EstadoCita estado, boolean confLlamada) {
 			this.id = id;
 			this.nombre = nombre;
 			this.fechaHora = fechaHora;
 			this.descripcion = descripcion;
 			this.duracionMin = duracionMin;
 			this.estado = estado;
+			this.confLlamada = confLlamada;
 		}
 		
 		public Cita() {
 		}
 		
 		public Cita(String nombre, LocalDateTime fechaHora, String descripcion, int duracionMin,
-				EstadoCita estado) {
-			this(0, nombre, fechaHora, descripcion, duracionMin, estado);
+				EstadoCita estado, boolean confLlamada) {
+			this(0, nombre, fechaHora, descripcion, duracionMin, estado, confLlamada);
 		}
 
 
@@ -86,6 +88,15 @@ public class Cita {
 		public void setEstado(EstadoCita estado) {
 			this.estado = estado;
 		}
+
+		public boolean getConfLlamada() {
+			return confLlamada;
+		}
+
+		public void setConfLlamada(boolean confLlamada) {
+			this.confLlamada = confLlamada;
+		}
+		
 		
 		
 		

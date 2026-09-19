@@ -31,6 +31,7 @@ public class VentanaPrincipal extends JFrame {
     private JTextField txtDescripcion;
     private JTextField txtDuracion;
     private JComboBox<EstadoCita> cmbEstado;
+    private JCheckBox boolConfirmacion;
  
     private JButton btnCrear;
     private JButton btnActualizar;
@@ -66,7 +67,7 @@ public class VentanaPrincipal extends JFrame {
  
         //Tabla
         modeloTabla = new DefaultTableModel(
-                new Object[]{"ID", "Nombre", "Fecha y hora", "Descripción", "Duración (min)", "Estado"}, 0) {
+                new Object[]{"ID", "Nombre", "Fecha y hora", "Descripción", "Duración (min)", "Estado", "Confirmación por llamada requerida"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; 
@@ -81,7 +82,7 @@ public class VentanaPrincipal extends JFrame {
         panelCentral.add(new JScrollPane(tablaCitas), BorderLayout.CENTER);
  
         // Formulario
-        JPanel panelFormulario = new JPanel(new GridLayout(5, 2, 5, 5));
+        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 2, 5));
         panelFormulario.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
  
         txtNombre = new JTextField();
@@ -89,6 +90,7 @@ public class VentanaPrincipal extends JFrame {
         txtDescripcion = new JTextField();
         txtDuracion = new JTextField();
         cmbEstado = new JComboBox<>(EstadoCita.values());
+        boolConfirmacion = new JCheckBox();
  
         panelFormulario.add(new JLabel("Nombre:"));
         panelFormulario.add(txtNombre);
@@ -104,6 +106,9 @@ public class VentanaPrincipal extends JFrame {
  
         panelFormulario.add(new JLabel("Estado:"));
         panelFormulario.add(cmbEstado);
+        
+        panelFormulario.add(new JLabel("Confirmacion por llamada:"));
+        panelFormulario.add(boolConfirmacion);
  
         panelCentral.add(panelFormulario, BorderLayout.NORTH);
  
@@ -142,7 +147,8 @@ public class VentanaPrincipal extends JFrame {
                         cita.getFechaHora().format(FORMATO_FECHA),
                         cita.getDescripcion(),
                         cita.getDuracionMin(),
-                        cita.getEstado()
+                        cita.getEstado(),
+                        cita.getConfLlamada(),
                 });
             }
         } catch (SQLException ex) {
@@ -162,6 +168,7 @@ public class VentanaPrincipal extends JFrame {
         txtDescripcion.setText((String) modeloTabla.getValueAt(filaSeleccionada, 3));
         txtDuracion.setText(String.valueOf(modeloTabla.getValueAt(filaSeleccionada, 4)));
         cmbEstado.setSelectedItem(modeloTabla.getValueAt(filaSeleccionada, 5));
+        boolConfirmacion.setText(String.valueOf(modeloTabla.getValueAt(filaSeleccionada, 6)));
     }
  
     //Operaciones CRUD

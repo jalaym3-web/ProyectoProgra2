@@ -25,8 +25,8 @@ public class CitaDAO {
     // CREATE
     public int crear(Cita cita) throws SQLException {
     	CitaValidacion.validar(cita);
-        String sql = "INSERT INTO citas (nombre, fecha_hora, descripcion, duracion_min, estado) "
-                   + "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO citas (nombre, fecha_hora, descripcion, duracion_min, estado, conf_llamada) "
+                   + "VALUES (?, ?, ?, ?, ?, ?)";
  
         try (Connection conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
              PreparedStatement statement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -36,6 +36,7 @@ public class CitaDAO {
             statement.setString(3, cita.getDescripcion());
             statement.setInt(4, cita.getDuracionMin());
             statement.setString(5, cita.getEstado().name().toLowerCase());
+            statement.setBoolean(6, cita.getConfLlamada());
             statement.executeUpdate();
  
             try (ResultSet claves = statement.getGeneratedKeys()) {
@@ -85,7 +86,7 @@ public class CitaDAO {
     // UPDATE
     public boolean actualizar(Cita cita) throws SQLException {
         String sql = "UPDATE citas SET nombre = ?, fecha_hora = ?, descripcion = ?, "
-                   + "duracion_min = ?, estado = ? WHERE id = ?";
+                   + "duracion_min = ?, estado = ?, conf_llamada = ? WHERE id = ?";
  
         try (Connection conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
              PreparedStatement statement = conexion.prepareStatement(sql)) {
@@ -95,7 +96,8 @@ public class CitaDAO {
             statement.setString(3, cita.getDescripcion());
             statement.setInt(4, cita.getDuracionMin());
             statement.setString(5, cita.getEstado().name().toLowerCase());
-            statement.setInt(6, cita.getId());
+            statement.setBoolean(6,cita.getConfLlamada());
+            statement.setInt(7, cita.getId());
  
             int filasAfectadas = statement.executeUpdate();
             return filasAfectadas > 0;
@@ -128,6 +130,7 @@ public class CitaDAO {
         cita.setDescripcion(resultado.getString("descripcion"));
         cita.setDuracionMin(resultado.getInt("duracion_min"));
         cita.setEstado(EstadoCita.valueOf(resultado.getString("estado").toUpperCase()));
+        cita.setConfLlamada(resultado.getBoolean("conf_llamada"));
  
         return cita;
     }
