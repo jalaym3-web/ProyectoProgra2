@@ -8,7 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -116,7 +118,20 @@ public class CitaDAO {
             return filasAfectadas > 0;
         }
     }
- 
+    
+    
+    public Map<String, List<Cita>> agruparPorDescripcion() {
+        Map<String, List<Cita>> grupos = new LinkedHashMap<>();
+        try {
+			for (Cita c : listarTodas()) {
+			    grupos.computeIfAbsent(c.getDescripcion(), k -> new ArrayList<>()).add(c);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        return grupos;
+    }
+    
     // Mapeo
     private Cita mapearCita(ResultSet resultado) throws SQLException {
         Cita cita = new Cita();

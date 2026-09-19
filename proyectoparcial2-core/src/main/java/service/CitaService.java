@@ -2,6 +2,7 @@ package service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import dao.CitaDAO;
@@ -41,5 +42,10 @@ public class CitaService {
  
     public boolean eliminar(int id) throws SQLException {
         return citaDAO.eliminar(id);
+    }
+    
+    public Map<String, List<Cita>> agruparPorDescripcion() throws SQLException {
+		return citaDAO.agruparPorDescripcion();
+    	
     }
 }

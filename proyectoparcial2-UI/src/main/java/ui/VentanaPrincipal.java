@@ -6,12 +6,18 @@ import service.CitaService;
  
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import dao.CitaDAO;
+
 import java.awt.*;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -32,6 +38,9 @@ public class VentanaPrincipal extends JFrame {
     private JTextField txtDuracion;
     private JComboBox<EstadoCita> cmbEstado;
     private JCheckBox boolConfirmacion;
+    private JComboBox<String> cmbDescripcion = new JComboBox<>();
+    private Map<String, List<Cita>> grupos = new LinkedHashMap<>();
+    private static final String TODAS = "Todas";
  
     private JButton btnCrear;
     private JButton btnActualizar;
@@ -91,6 +100,12 @@ public class VentanaPrincipal extends JFrame {
         txtDuracion = new JTextField();
         cmbEstado = new JComboBox<>(EstadoCita.values());
         boolConfirmacion = new JCheckBox();
+        JPanel panelFiltro = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelFiltro.add(new JLabel("Agrupar por descripción:"));
+        panelFiltro.add(cmbDescripcion);
+        add(panelFiltro, BorderLayout.NORTH); // o donde te quede mejor
+
+        cmbDescripcion.addActionListener(e -> mostrarGrupoSeleccionado());
  
         panelFormulario.add(new JLabel("Nombre:"));
         panelFormulario.add(txtNombre);
@@ -205,6 +220,21 @@ public class VentanaPrincipal extends JFrame {
             mostrarError("Error al actualizar la cita: " + ex.getMessage());
         }
     }
+    private void cargarGrupos() {
+        try {
+            grupos = CitaDAO;
+
+            cmbDescripcion.removeAllItems();
+            cmbDescripcion.addItem(TODAS);
+            for (Map.Entry<String, List<Cita>> e : grupos.entrySet()) {
+                cmbDescripcion.addItem(e.getKey());
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "No se pudieron cargar las citas: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
  
     private void eliminarCita() {
         if (idSeleccionado == -1) {
@@ -264,7 +294,29 @@ public class VentanaPrincipal extends JFrame {
         cmbEstado.setSelectedIndex(0);
         tablaCitas.clearSelection();
     }
+    
+
  
+    private void mostrarGrupoSeleccionado() {
+        String elegido = (String) cmbDescripcion.getSelectedItem();
+        if (elegido == null) return;
+
+        List<Cita> lista = new ArrayList<>();
+        if (TODAS.equals(elegido)) {
+            grupos.values().forEach(lista::addAll);
+        } else {
+            lista = grupos.getOrDefault(elegido, new ArrayList<>());
+        }
+
+        modeloTabla.setRowCount(0); // limpia la tabla
+        for (Cita c : lista) {
+            modeloTabla.addRow(new Object[] {
+                c.getId(), c.getNombre(), c.getFechaHora(),
+                c.getDescripcion(), c.getDuracionMin(), c.getEstado()
+            });
+        }
+    }
+    
     private void mostrarError(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
