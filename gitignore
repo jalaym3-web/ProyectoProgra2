@@ -9,19 +9,19 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
- 
+
 # --- Eclipse ---
 .classpath
 .project
 .settings/
 bin/
- 
+
 # --- IntelliJ IDEA ---
 .idea/
 *.iml
 *.iws
 out/
- 
+
 # --- NetBeans ---
 nbproject/private/
 build/
@@ -29,14 +29,14 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
- 
+
 # --- Sistema operativo ---
 .DS_Store
 Thumbs.db
- 
+
 # --- Logs ---
 *.log
- 
+
 # --- Archivos de configuración con credenciales (si los llegas a usar) ---
 application.properties
 *.env
